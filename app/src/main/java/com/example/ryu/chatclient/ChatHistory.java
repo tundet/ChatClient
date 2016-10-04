@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 /*
-This class is an instance that gets the messages from the CommandInterpreter and turns them into a String.
 
 @authors
 1402803 Jämiä Mikko
