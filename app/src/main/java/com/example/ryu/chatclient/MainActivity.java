@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
             @Override
             public void run() {
                 try {
-                    socket = new Socket("10.0.2.2", 58024);
+                    socket = new Socket("10.0.2.2", 51140);
                     System.out.println(socket);
                     System.out.println("Szia");
                 } catch (IOException e) {
