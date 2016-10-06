@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
     ListView lv;
     Socket socket = null;
     ChatArrayAdapter adapter;
-    String username = "";
+    String myusername = "";
     String system = "System";
 
 
@@ -45,14 +45,14 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
                     // If TextView is empty - copy string from EditText
                     //if (tx.getText().toString().equals("")) {
                         String message = (et.getText().toString());
-                    if(username == ""){
-                        username = message;
-                        String message2 = "Username set to " + username;
+                    if(myusername == ""){
+                        myusername = message;
+                        String message2 = "Username set to " + myusername;
                         ChatMessage chatMessage = new ChatMessage(true, system, message2);
                         new ServerWriter(socket, chatMessage);
                     }else{
                         //tx.append(">" + message);
-                        ChatMessage chatMessage = new ChatMessage(false, username, message);
+                        ChatMessage chatMessage = new ChatMessage(false, myusername, message);
                         new ServerWriter(socket, chatMessage);
                     //} else { // Otherwise, clear the TextView.
                       //  tx.append("clear");
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
             @Override
             public void run() {
                 try {
-                    socket = new Socket("10.0.2.2", 49765);
+                    socket = new Socket("10.0.2.2", 59605);
                     System.out.println(socket);
                     System.out.println("Szia");
                 } catch (IOException e) {

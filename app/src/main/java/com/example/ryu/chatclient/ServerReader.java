@@ -40,6 +40,7 @@ public class ServerReader implements Runnable {
                     int idx = input.indexOf(':'); //TODO error handling
                     String username = input.substring(0, idx);
                     String message = input.substring(idx+1);
+                    //if(username == )
                     ChatMessage chatMessage = new ChatMessage(false, username, message);
                     history.insert(chatMessage);
 
