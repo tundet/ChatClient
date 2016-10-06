@@ -8,9 +8,12 @@ public class ChatMessage {
     /*Instance variables for ChatMessage*/
     String message;
     String username;
+    public boolean left;
 
     /*Constructor for ChatMessage*/
-    ChatMessage(String username, String message) {
+    ChatMessage(boolean left, String username, String message) {
+        super();
+        this.left = left;
         this.username = username;
         this.message = message;
     }

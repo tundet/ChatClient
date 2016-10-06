@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -14,8 +15,11 @@ import java.net.Socket;
 
 public class MainActivity extends AppCompatActivity implements ChatObserver {
     EditText et;
-    TextView tx;
+    ListView lv;
     Socket socket = null;
+    ChatArrayAdapter adapter;
+    String username = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,24 +28,31 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
 
         Button b = (Button) findViewById(R.id.button);
         et = (EditText) findViewById(R.id.editText1);
-        tx = (TextView) findViewById(R.id.textView1);
+        //tx = (TextView) findViewById(R.id.textView1);
+        lv = (ListView) findViewById(R.id.listView1);
+
+        adapter = new ChatArrayAdapter(getApplicationContext(), R.layout.list_bubble);
+
+        lv.setAdapter(adapter);
 
 
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("On click listener started." + tx.getText().toString());
+                System.out.println("On click listener started." + lv.getAdapter().toString());
                 if (socket != null) {
                     // If TextView is empty - copy string from EditText
                     //if (tx.getText().toString().equals("")) {
                         String message = (et.getText().toString());
-                        String username = "ryu";
-                        tx.append(">" + message);
-                        ChatMessage chatMessage = new ChatMessage(username, message);
+                    if(username == null){
+                        username = message;
+                    }else{
+                        //tx.append(">" + message);
+                        ChatMessage chatMessage = new ChatMessage(false, username, message);
                         new ServerWriter(socket, chatMessage);
                     //} else { // Otherwise, clear the TextView.
                       //  tx.append("clear");
-                    //}
+                    }
                 }
             }
         });
@@ -55,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
             @Override
             public void run() {
                 try {
-                    socket = new Socket("10.0.2.2", 51140);
+                    socket = new Socket("10.0.2.2", 51852);
                     System.out.println(socket);
                     System.out.println("Szia");
                 } catch (IOException e) {
@@ -85,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
 
                         @Override
                         public void run() {
-                            tx.append("\n" + message.username + ": " + message.message + "\n");
+                            adapter.add(message);
                         }
                     });
 
