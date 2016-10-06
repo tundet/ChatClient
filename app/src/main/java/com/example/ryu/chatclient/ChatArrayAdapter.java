@@ -51,14 +51,14 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
 
         wrapper = (LinearLayout) row.findViewById(R.id.wrapper);
 
-        ChatMessage coment = getItem(position);
+        ChatMessage chatMessage = getItem(position);
 
         countryName = (TextView) row.findViewById(R.id.comment);
 
-        countryName.setText(coment.message);
+        countryName.setText(chatMessage.username + ": " + chatMessage.message);
 
-        countryName.setBackgroundResource(coment.left ? R.drawable.bubble_yellow : R.drawable.bubble_green);
-        wrapper.setGravity(coment.left ? Gravity.LEFT : Gravity.RIGHT);
+        countryName.setBackgroundResource(chatMessage.left ? R.drawable.bubble_white : R.drawable.bubble_blue);
+        wrapper.setGravity(chatMessage.left ? Gravity.LEFT : Gravity.RIGHT);
 
         return row;
     }
