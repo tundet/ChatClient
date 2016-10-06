@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
     ChatArrayAdapter adapter;
     String myusername = "";
     String system = "System";
+    ServerReader reader;
 
 
     @Override
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
 
         adapter = new ChatArrayAdapter(getApplicationContext(), R.layout.list_bubble);
 
+
         lv.setAdapter(adapter);
 
 
@@ -47,12 +49,17 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
                         String message = (et.getText().toString());
                     if(myusername == ""){
                         myusername = message;
-                        String message2 = "Username set to " + myusername;
-                        ChatMessage chatMessage = new ChatMessage(true, system, message2);
-                        new ServerWriter(socket, chatMessage);
+                        String message2 = myusername + " has joined the chat.";
+                        ChatMessage joined = new ChatMessage(system, message2);
+                        new ServerWriter(socket, joined);
+                        adapter.setMyName(myusername);
+                        String message3 = "Welcome to the chat. Start by typing something.#Commands:#:history = show history#:userlist = list users#:help = help";
+                        ChatMessage welcome = new ChatMessage(system, message3);
+                        adapter.add(welcome);
+
                     }else{
                         //tx.append(">" + message);
-                        ChatMessage chatMessage = new ChatMessage(false, myusername, message);
+                        ChatMessage chatMessage = new ChatMessage(myusername, message);
                         new ServerWriter(socket, chatMessage);
                     //} else { // Otherwise, clear the TextView.
                       //  tx.append("clear");
@@ -70,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
             @Override
             public void run() {
                 try {
-                    socket = new Socket("10.0.2.2", 59605);
+                    socket = new Socket("10.0.2.2", 53202);
                     System.out.println(socket);
                     System.out.println("Szia");
                 } catch (IOException e) {
@@ -79,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
                 }
                 System.out.println("Create ServerReader");
                 //create ServerReader
-                ServerReader reader = new ServerReader(socket, chatHistory);
+                reader = new ServerReader(socket, chatHistory);
                 Thread thread = new Thread(reader);
                 thread.start();
 
@@ -101,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
                         @Override
                         public void run() {
                             adapter.add(message);
+                            System.out.println(message);
                         }
                     });
 

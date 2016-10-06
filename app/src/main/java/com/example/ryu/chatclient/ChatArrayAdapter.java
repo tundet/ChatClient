@@ -23,9 +23,11 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
     private TextView countryName;
     private List<ChatMessage> countries = new ArrayList<ChatMessage>();
     private LinearLayout wrapper;
+    String myname = "";
 
     @Override
     public void add(ChatMessage object) {
+        object.message = object.toString();
         countries.add(object);
         super.add(object);
     }
@@ -55,16 +57,21 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
 
         countryName = (TextView) row.findViewById(R.id.comment);
 
-        countryName.setText(chatMessage.username + ": " + chatMessage.message);
+        countryName.setText(chatMessage.username + ": " + chatMessage.message.replace('#','\n'));
 
-        countryName.setBackgroundResource(chatMessage.left ? R.drawable.bubble_white : R.drawable.bubble_blue);
-        wrapper.setGravity(chatMessage.left ? Gravity.LEFT : Gravity.RIGHT);
+        countryName.setBackgroundResource(chatMessage.username.equals(myname) ? R.drawable.bubble_blue : R.drawable.bubble_white);
+
+        wrapper.setGravity(chatMessage.username.equals(myname) ? Gravity.RIGHT : Gravity.LEFT);
 
         return row;
     }
 
     public Bitmap decodeToBitmap(byte[] decodedByte) {
         return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
+    }
+
+    void setMyName(String myusername){
+        this.myname = myusername;
     }
 
 }

@@ -35,15 +35,13 @@ public class ServerReader implements Runnable {
             while (!socket.isClosed()) {
                 String input = in.readLine();
                 System.out.println("Server Reader: " + input);
-                if (input != null) {
+                if (input != null && input.length() > 1) {
                     System.out.println("Server Reader after if: " + input);
                     int idx = input.indexOf(':'); //TODO error handling
                     String username = input.substring(0, idx);
                     String message = input.substring(idx+1);
-                    //if(username == )
-                    ChatMessage chatMessage = new ChatMessage(false, username, message);
+                    ChatMessage chatMessage = new ChatMessage(username, message);
                     history.insert(chatMessage);
-
                 }else{
                     break;
                 }
