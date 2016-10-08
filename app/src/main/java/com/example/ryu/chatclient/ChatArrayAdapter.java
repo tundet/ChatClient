@@ -58,12 +58,12 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
 
         countryName = (TextView) row.findViewById(R.id.comment);
 
-        if(chatMessage.username.equals(system)){
+        if(chatMessage.username.equals(system)) {
             countryName.setText(chatMessage.message.replace('#', '\n'));
             countryName.setBackgroundResource(R.drawable.bubble_grey);
             wrapper.setGravity(Gravity.CENTER);
             return row;
-        }else {
+        }else{
             countryName.setText(chatMessage.username + ": " + chatMessage.message.replace('#', '\n'));
 
             countryName.setBackgroundResource(chatMessage.username.equals(myname) ? R.drawable.bubble_blue : R.drawable.bubble_white);
@@ -71,6 +71,7 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
             wrapper.setGravity(chatMessage.username.equals(myname) ? Gravity.RIGHT : Gravity.LEFT);
 
             return row;
+
         }
     }
 

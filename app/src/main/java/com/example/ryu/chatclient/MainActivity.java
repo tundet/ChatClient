@@ -1,6 +1,7 @@
 package com.example.ryu.chatclient;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         Button b = (Button) findViewById(R.id.button);
         et = (EditText) findViewById(R.id.editText1);
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
 
 
         lv.setAdapter(adapter);
+
 
 
         b.setOnClickListener(new View.OnClickListener() {
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
                         ChatMessage joined = new ChatMessage(system, message2);
                         new ServerWriter(socket, joined);
                         adapter.setMyName(myusername);
-                        String message3 = "Welcome to the chat. Start by typing something.#Commands:#:history = show history#:userlist = list users#:help = help";
+                        String message3 = "Welcome to the chat. Start by typing something.#Commands:#:history = show history#:userlist = list users#:help = help#:tableflip = (╯°□°）╯︵ ┻━┻#:quit = leave chat";
                         ChatMessage welcome = new ChatMessage(system, message3);
                         adapter.add(welcome);
                         et.setHint("Type here");
@@ -77,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
         });
 
         //create ChatHistory
-        final ChatHistory chatHistory = new ChatHistory();
+        final ChatHistory chatHistory = ChatHistory.getInstance();
         //register observer
         chatHistory.register(this);
 
@@ -85,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
             @Override
             public void run() {
                 try {
-                    socket = new Socket("10.0.2.2", 53202);
+                    socket = new Socket("10.0.2.2", 52847);
                     System.out.println(socket);
                     System.out.println("Szia");
                 } catch (IOException e) {
@@ -117,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
                         public void run() {
                             adapter.add(message);
                             System.out.println(message);
+                            lv.setSelection(lv.getAdapter().getCount()-1);
                         }
                     });
 

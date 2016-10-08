@@ -1,9 +1,6 @@
 package com.example.ryu.chatclient;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-
 /*
 
 @authors
@@ -20,7 +17,7 @@ public class ChatHistory implements ObservableChat {
 
 
     /*Constructor for ChatHistory*/
-    public ChatHistory() {
+    private ChatHistory() {
         this.observers = new ArrayList<>();
         this.messageList = new ArrayList<>();
     }
@@ -44,9 +41,8 @@ public class ChatHistory implements ObservableChat {
         String list = new String();
 
         for (ChatMessage element : messageList) {
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
 
-            list += (timeStamp + " " + element.username + ": " + element.message + "\n");
+            list += (element.username + ": " + element.message + "\n");
         }
 
         return list;
@@ -56,7 +52,6 @@ public class ChatHistory implements ObservableChat {
     @Override
     public void register(ChatObserver observer) {
         observers.add(observer);
-
     }
 
     /*deregister() method for removing observers*/
