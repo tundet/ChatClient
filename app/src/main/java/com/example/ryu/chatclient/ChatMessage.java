@@ -1,4 +1,6 @@
 package com.example.ryu.chatclient;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * Created by RYU on 4.10.2016.
@@ -6,12 +8,15 @@ package com.example.ryu.chatclient;
 public class ChatMessage {
 
     /*Instance variables for ChatMessage*/
+
     String message;
     String username;
+    String timestamp;
 
     /*Constructor for ChatMessage*/
-    ChatMessage(String username, String message) {
+    ChatMessage(String timestamp, String username, String message) {
         super();
+        this.timestamp = timestamp;
         this.username = username;
         this.message = message;
     }

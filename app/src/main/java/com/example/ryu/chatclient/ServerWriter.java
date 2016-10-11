@@ -34,9 +34,9 @@ public class ServerWriter implements Runnable {
     @Override
     public void run(){
 
-        out.println(chatMessage.username + ": " + chatMessage.message); //TODO cleanup
+        out.println(chatMessage.timestamp + chatMessage.username + ": " + chatMessage.message); //TODO cleanup
         System.out.println("ServerWriter: " + out.checkError());
-        System.out.println("ServerWriter: " + chatMessage.username + ": " + chatMessage.message);
+        System.out.println("ServerWriter: " + chatMessage.timestamp + chatMessage.username + ": " + chatMessage.message);
         Log.i("ServerWriter", "created");
     }
 }

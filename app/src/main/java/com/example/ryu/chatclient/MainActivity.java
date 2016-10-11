@@ -15,8 +15,12 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements ChatObserver {
+
+    /*Class member variables*/
     EditText et;
     ListView lv;
     Socket socket = null;
@@ -24,25 +28,26 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
     String myusername = "";
     String system = "System";
     ServerReader reader;
+    ServerWriter writer;
 
-
+    /*Android System will call this at startup*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /*Use activity_main layout and portrait orientation on create*/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+
+        /*Initialize UI elements*/
         Button b = (Button) findViewById(R.id.button);
         et = (EditText) findViewById(R.id.editText1);
         et.setHint("Type username here");
-        //tx = (TextView) findViewById(R.id.textView1);
         lv = (ListView) findViewById(R.id.listView1);
 
+        /*Create ArrayAdapter and pass it to ListView*/
         adapter = new ChatArrayAdapter(getApplicationContext(), R.layout.list_bubble);
-
-
         lv.setAdapter(adapter);
-
 
 
         b.setOnClickListener(new View.OnClickListener() {
@@ -50,53 +55,56 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
             public void onClick(View v) {
                 System.out.println("On click listener started." + lv.getAdapter().toString());
                 if (socket != null) {
-                    // If TextView is empty - copy string from EditText
-                    //if (tx.getText().toString().equals("")) {
-                        String message = (et.getText().toString());
+                    String message = (et.getText().toString());
+                    /*Don't allow empty message*/
+                    if (message.equals("")){
+                        return;
+                    }
+
+                    /*Get current timeStamp*/
+                    String timeStamp = "[" + new SimpleDateFormat("HH.mm").format(Calendar.getInstance().getTime()) + "]";
+
+                    /*Setup username and initialize writer thread only once*/
                     if(myusername == ""){
                         myusername = message;
                         String message2 = myusername + " has joined the chat.";
-                        ChatMessage joined = new ChatMessage(system, message2);
-                        new ServerWriter(socket, joined);
+                        ChatMessage joined = new ChatMessage(timeStamp, system, message2);
+                        /*Start ServerWriter thread*/
+                        writer = new ServerWriter(socket, joined);
+                        /*Give ArrayAdapter the new username*/
                         adapter.setMyName(myusername);
+                        /*Show Welcome message with possible commands*/
                         String message3 = "Welcome to the chat. Start by typing something.#Commands:#:history = show history#:userlist = list users#:help = help#:tableflip = (╯°□°）╯︵ ┻━┻#:quit = leave chat";
-                        ChatMessage welcome = new ChatMessage(system, message3);
-                        adapter.add(welcome);
-                        et.setHint("Type here");
-
+                        ChatMessage welcome = new ChatMessage(timeStamp, system, message3);
+                        adapter.add(welcome); //shows the message in ListView
+                        et.setHint("Type here"); //change Hint in EditText
                     }else{
-                        //tx.append(">" + message);
-                        ChatMessage chatMessage = new ChatMessage(myusername, message);
-                        new ServerWriter(socket, chatMessage);
-                    //} else { // Otherwise, clear the TextView.
-                      //  tx.append("clear");
+                        /*Send a regular message with timestamp, username and input once username is given*/
+                        ChatMessage chatMessage = new ChatMessage(timeStamp, myusername, message);
+                        new ServerWriter(socket, chatMessage); //give it to ServerWriter, which sends it to the server.
                     }
                 }
+                /*Hide keyboard and clear EditText*/
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(et.getApplicationWindowToken(), 0);
                 et.setText("");
 
             }
         });
-
-        //create ChatHistory
+        /*Get ChatHistory instance and register this Activity as an observer in order to display messages*/
         final ChatHistory chatHistory = ChatHistory.getInstance();
-        //register observer
         chatHistory.register(this);
 
+        /*Initialize reader*/
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    socket = new Socket("10.0.2.2", 52847);
-                    System.out.println(socket);
-                    System.out.println("Szia");
+                    socket = new Socket("10.0.2.2", 53997);//update port manually for now, in production this should be a well defined address with port.
                 } catch (IOException e) {
-                    e.printStackTrace();
-                    System.out.println("Hello");
+                    e.printStackTrace();//oops
                 }
-                System.out.println("Create ServerReader");
-                //create ServerReader
+                //Initialize and start reader thread
                 reader = new ServerReader(socket, chatHistory);
                 Thread thread = new Thread(reader);
                 thread.start();
@@ -108,8 +116,7 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
 
     @Override
     public void update(final ChatMessage message) {
-            /*TODO print message to TextView and call runOnUIThread method*/
-        System.out.print(message.username + ": " + message.message + "\n>");
+        System.out.print(message.timestamp + message.username + ": " + message.message + "\n>");
 
         new Thread() {
             public void run() {
@@ -119,7 +126,6 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
                         @Override
                         public void run() {
                             adapter.add(message);
-                            System.out.println(message);
                             lv.setSelection(lv.getAdapter().getCount()-1);
                         }
                     });

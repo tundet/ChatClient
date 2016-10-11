@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * Created by RYU on 4.10.2016.
@@ -37,10 +39,12 @@ public class ServerReader implements Runnable {
                 System.out.println("Server Reader: " + input);
                 if (input != null && input.length() > 1) {
                     System.out.println("Server Reader after if: " + input);
-                    int idx = input.indexOf(':'); //TODO error handling
-                    String username = input.substring(0, idx);
-                    String message = input.substring(idx+1);
-                    ChatMessage chatMessage = new ChatMessage(username, message);
+                    int idx = input.indexOf(']');
+                    int idx2 = input.indexOf(':'); //TODO error handling
+                    String timeStamp = input.substring(0,idx+1);
+                    String username = input.substring(idx+1, idx2);
+                    String message = input.substring(idx2+1);
+                    ChatMessage chatMessage = new ChatMessage(timeStamp, username, message);
                     history.insert(chatMessage);
                 }else{
                     break;
