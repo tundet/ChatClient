@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
             @Override
             public void run() {
                 try {
-                    socket = new Socket("10.0.2.2", 53997);//update port manually for now
+                    socket = new Socket("10.0.2.2", 50402);//update port manually for now
                     // in production this should be a well defined address with port.
                 } catch (IOException e) {
                     e.printStackTrace();//oops

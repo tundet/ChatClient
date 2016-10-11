@@ -30,17 +30,17 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
     String myname = "";
     String system = "System";
 
+    /*Constructor with application context and layout to use*/
+    public ChatArrayAdapter(Context context, int textViewResourceId) {
+        super(context, textViewResourceId);
+    }
+
     /*Method for adding a message to messages list*/
     @Override
     public void add(ChatMessage object) {
         object.message = object.toString();
         messages.add(object);
         super.add(object);
-    }
-
-    /*Constructor with application context and layout to use*/
-    public ChatArrayAdapter(Context context, int textViewResourceId) {
-        super(context, textViewResourceId);
     }
 
     /*Method for getting the size of messages list*/
@@ -74,7 +74,7 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
         /*Initialize new ChatMessage*/
         ChatMessage chatMessage = getItem(position);
 
-        /*Initialize new message's textview*/
+        /*Initialize new message's textView*/
         newMessage = (TextView) row.findViewById(R.id.comment);
 
         /*If message sent by System show grey bubble in center
