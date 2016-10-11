@@ -1,19 +1,25 @@
 package com.example.ryu.chatclient;
+/**
+ * This class is an instance that creates the needed objects and works
+ * as an observer for ChatHistory.
+ * @authors
+ * Group Tableflipz
+ * 1402803 Jämiä Mikko
+ * 1406733 Järvinen Otto
+ * 1503524 Taba Tünde
+ */
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -53,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("On click listener started." + lv.getAdapter().toString());
                 if (socket != null) {
                     String message = (et.getText().toString());
                     /*Don't allow empty message*/
@@ -74,12 +79,15 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
                         /*Give ArrayAdapter the new username*/
                         adapter.setMyName(myusername);
                         /*Show Welcome message with possible commands*/
-                        String message3 = "Welcome to the chat. Start by typing something.#Commands:#:history = show history#:userlist = list users#:help = help#:tableflip = (╯°□°）╯︵ ┻━┻#:quit = leave chat";
+                        String message3 = "Welcome to the chat. Start by typing something." +
+                                "#Commands:#:history = show history#:userlist = list users" +
+                                "#:help = help#:tableflip = (╯°□°）╯︵ ┻━┻#:quit = leave chat";
                         ChatMessage welcome = new ChatMessage(timeStamp, system, message3);
                         adapter.add(welcome); //shows the message in ListView
                         et.setHint("Type here"); //change Hint in EditText
                     }else{
-                        /*Send a regular message with timestamp, username and input once username is given*/
+                        /*Send a regular message with timestamp, username
+                        and input once username is given*/
                         ChatMessage chatMessage = new ChatMessage(timeStamp, myusername, message);
                         new ServerWriter(socket, chatMessage); //give it to ServerWriter, which sends it to the server.
                     }
@@ -91,7 +99,8 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
 
             }
         });
-        /*Get ChatHistory instance and register this Activity as an observer in order to display messages*/
+        /*Get ChatHistory instance and register this Activity as an observer
+        in order to display messages*/
         final ChatHistory chatHistory = ChatHistory.getInstance();
         chatHistory.register(this);
 
@@ -100,7 +109,8 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
             @Override
             public void run() {
                 try {
-                    socket = new Socket("10.0.2.2", 53997);//update port manually for now, in production this should be a well defined address with port.
+                    socket = new Socket("10.0.2.2", 53997);//update port manually for now
+                    // in production this should be a well defined address with port.
                 } catch (IOException e) {
                     e.printStackTrace();//oops
                 }
@@ -114,9 +124,9 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
         }).start();
     }
 
+    /*Observer's update method*/
     @Override
     public void update(final ChatMessage message) {
-        System.out.print(message.timestamp + message.username + ": " + message.message + "\n>");
 
         new Thread() {
             public void run() {
@@ -125,6 +135,8 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
 
                         @Override
                         public void run() {
+                            /*Give new message to adapter to show it on ListView
+                            and scroll to the bottom*/
                             adapter.add(message);
                             lv.setSelection(lv.getAdapter().getCount()-1);
                         }
@@ -132,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements ChatObserver {
 
                     Thread.sleep(300);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    e.printStackTrace();//oops
                 }
             }
 

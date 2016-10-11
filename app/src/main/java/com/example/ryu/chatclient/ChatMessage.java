@@ -1,14 +1,17 @@
 package com.example.ryu.chatclient;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 /**
- * Created by RYU on 4.10.2016.
+* This class is the blueprint for the chat messages that we send around.
+ * @authors
+ * Group Tableflipz
+ * 1402803 Jämiä Mikko
+ * 1406733 Järvinen Otto
+ * 1503524 Taba Tünde
  */
+
 public class ChatMessage {
 
     /*Instance variables for ChatMessage*/
-
     String message;
     String username;
     String timestamp;

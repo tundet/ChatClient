@@ -1,7 +1,12 @@
 package com.example.ryu.chatclient;
 
 /**
- * Created by RYU on 4.10.2016.
+ * This interface initializes the update method for an observer
+ * @authors
+ * Group Tableflipz
+ * 1402803 Jämiä Mikko
+ * 1406733 Järvinen Otto
+ * 1503524 Taba Tünde
  */
 public interface ChatObserver {
 

@@ -1,13 +1,17 @@
 package com.example.ryu.chatclient;
 
-import java.util.ArrayList;
-/*
-
-@authors
-1402803 Jämiä Mikko
-1406733 Järvinen Otto
-1503524 Taba Tünde
+/**
+ * This class is a singleton that contains an arraylist with all the messages gotten and works as
+ * an observable subject for observers.
+ * @authors
+ * Group Tableflipz
+ * 1402803 Jämiä Mikko
+ * 1406733 Järvinen Otto
+ * 1503524 Taba Tünde
  */
+
+import java.util.ArrayList;
+
 public class ChatHistory implements ObservableChat {
 
     /*Instance variables for ChatHistory*/
@@ -28,14 +32,14 @@ public class ChatHistory implements ObservableChat {
         return instance;
     }
 
-    /*insert() method for ChatHistory. Method adds message to chat history and runs notifyObservers method.*/
+    /*insert() method for ChatHistory. Method adds message to chat history and thus
+    * notifies all the observers*/
     public void insert(ChatMessage chatMessage) {
         messageList.add(chatMessage);
         notifyObservers(chatMessage);
     }
 
-    /*toString() method for chatHistory. Method adds time stamp to messages and
-    return chatHistory as a string*/
+    /*toString() method for showing the History*/
     @Override
     public String toString() {
         String list = new String();
